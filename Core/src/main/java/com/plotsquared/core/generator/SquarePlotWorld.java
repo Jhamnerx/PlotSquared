@@ -75,13 +75,12 @@ public abstract class SquarePlotWorld extends GridPlotWorld {
      * @return true if the coordinates are within the cross shape, false otherwise
      */
     public boolean isWithinCrossShape(int plotLocalX, int plotLocalZ) {
-        int thirdWidth = PLOT_WIDTH / 3;
-        int thirdLength = PLOT_WIDTH / 3;
+        int thirdSize = PLOT_WIDTH / 3;
         
         // Check if in vertical bar (center third horizontally)
-        boolean inVerticalBar = plotLocalX >= thirdWidth && plotLocalX < 2 * thirdWidth;
+        boolean inVerticalBar = plotLocalX >= thirdSize && plotLocalX < 2 * thirdSize;
         // Check if in horizontal bar (center third vertically)
-        boolean inHorizontalBar = plotLocalZ >= thirdLength && plotLocalZ < 2 * thirdLength;
+        boolean inHorizontalBar = plotLocalZ >= thirdSize && plotLocalZ < 2 * thirdSize;
         
         return inVerticalBar || inHorizontalBar;
     }

@@ -93,6 +93,26 @@ public abstract class SquarePlotManager extends GridPlotManager {
         return Location.at(squarePlotWorld.getWorldName(), x, squarePlotWorld.getMaxGenHeight(), z);
     }
 
+    /**
+     * Validates if coordinates are within a cross-shaped plot pattern.
+     * Returns true if the plot is not cross-shaped or if the coordinates are within the cross.
+     *
+     * @param rx The x coordinate modulo plot size
+     * @param rz The z coordinate modulo plot size
+     * @param pathWidthLower The lower path width
+     * @return true if valid for the plot shape, false otherwise
+     */
+    private boolean isValidForPlotShape(int rx, int rz, int pathWidthLower) {
+        if (squarePlotWorld.getShape() != PlotShape.CROSS) {
+            return true;
+        }
+        
+        int plotLocalX = rx - pathWidthLower - 1;
+        int plotLocalZ = rz - pathWidthLower - 1;
+        
+        return squarePlotWorld.isWithinCrossShape(plotLocalX, plotLocalZ);
+    }
+
     @Override
     public PlotId getPlotIdAbs(int x, int y, int z) {
         if (squarePlotWorld.ROAD_OFFSET_X != 0) {
@@ -125,14 +145,9 @@ public abstract class SquarePlotManager extends GridPlotManager {
             return null;
         }
         
-        // For cross-shaped plots, check if coordinates are within the cross pattern
-        if (squarePlotWorld.getShape() == PlotShape.CROSS) {
-            int plotLocalX = rx - pathWidthLower - 1;
-            int plotLocalZ = rz - pathWidthLower - 1;
-            
-            if (!squarePlotWorld.isWithinCrossShape(plotLocalX, plotLocalZ)) {
-                return null;
-            }
+        // Check if valid for plot shape (cross or square)
+        if (!isValidForPlotShape(rx, rz, pathWidthLower)) {
+            return null;
         }
         
         return PlotId.of(dx, dz);
@@ -190,14 +205,9 @@ public abstract class SquarePlotManager extends GridPlotManager {
             int hash = HashUtil.hash(merged);
             // Not merged, and no need to check if it is
             if (hash == 0) {
-                // For cross-shaped plots, check if coordinates are within the cross pattern
-                if (squarePlotWorld.getShape() == PlotShape.CROSS) {
-                    int plotLocalX = rx - pathWidthLower - 1;
-                    int plotLocalZ = rz - pathWidthLower - 1;
-                    
-                    if (!squarePlotWorld.isWithinCrossShape(plotLocalX, plotLocalZ)) {
-                        return null;
-                    }
+                // Check if valid for plot shape (cross or square)
+                if (!isValidForPlotShape(rx, rz, pathWidthLower)) {
+                    return null;
                 }
                 return id;
             }
