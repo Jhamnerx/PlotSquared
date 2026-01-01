@@ -24,6 +24,7 @@ import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
 import com.plotsquared.core.plot.PlotId;
+import com.plotsquared.core.plot.PlotShape;
 import com.plotsquared.core.queue.QueueCoordinator;
 import com.plotsquared.core.util.HashUtil;
 import com.plotsquared.core.util.RegionManager;
@@ -92,6 +93,26 @@ public abstract class SquarePlotManager extends GridPlotManager {
         return Location.at(squarePlotWorld.getWorldName(), x, squarePlotWorld.getMaxGenHeight(), z);
     }
 
+    /**
+     * Validates if coordinates are within a cross-shaped plot pattern.
+     * Returns true if the plot is not cross-shaped or if the coordinates are within the cross.
+     *
+     * @param rx The x coordinate modulo plot size
+     * @param rz The z coordinate modulo plot size
+     * @param pathWidthLower The lower path width
+     * @return true if valid for the plot shape, false otherwise
+     */
+    private boolean isValidForPlotShape(int rx, int rz, int pathWidthLower) {
+        if (squarePlotWorld.getShape() != PlotShape.CROSS) {
+            return true;
+        }
+        
+        int plotLocalX = rx - pathWidthLower - 1;
+        int plotLocalZ = rz - pathWidthLower - 1;
+        
+        return squarePlotWorld.isWithinCrossShape(plotLocalX, plotLocalZ);
+    }
+
     @Override
     public PlotId getPlotIdAbs(int x, int y, int z) {
         if (squarePlotWorld.ROAD_OFFSET_X != 0) {
@@ -118,11 +139,18 @@ public abstract class SquarePlotManager extends GridPlotManager {
         int rx = Math.floorMod(x, size);
         int dz = Math.floorDiv(z, size) + 1;
         int rz = Math.floorMod(z, size);
+        
+        // Check if on road
         if (rz <= pathWidthLower || rz > end || rx <= pathWidthLower || rx > end) {
             return null;
-        } else {
-            return PlotId.of(dx, dz);
         }
+        
+        // Check if valid for plot shape (cross or square)
+        if (!isValidForPlotShape(rx, rz, pathWidthLower)) {
+            return null;
+        }
+        
+        return PlotId.of(dx, dz);
     }
 
     public PlotId getNearestPlotId(@NonNull PlotArea plotArea, int x, int y, int z) {
@@ -177,6 +205,10 @@ public abstract class SquarePlotManager extends GridPlotManager {
             int hash = HashUtil.hash(merged);
             // Not merged, and no need to check if it is
             if (hash == 0) {
+                // Check if valid for plot shape (cross or square)
+                if (!isValidForPlotShape(rx, rz, pathWidthLower)) {
+                    return null;
+                }
                 return id;
             }
             Plot plot = squarePlotWorld.getOwnedPlotAbs(id);

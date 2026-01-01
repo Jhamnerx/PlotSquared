@@ -65,4 +65,27 @@ public abstract class SquarePlotWorld extends GridPlotWorld {
         this.SIZE = (short) (this.PLOT_WIDTH + this.ROAD_WIDTH);
     }
 
+    /**
+     * Checks if local plot coordinates are within the cross shape pattern.
+     * For a cross shape, the plot is divided into thirds both horizontally and vertically.
+     * Only the center vertical third and center horizontal third are considered part of the plot.
+     *
+     * Note: For best results, PLOT_WIDTH should be divisible by 3. If not, integer division
+     * will be used, which may result in slightly uneven cross shapes.
+     *
+     * @param plotLocalX The X coordinate relative to the plot's origin (0-based)
+     * @param plotLocalZ The Z coordinate relative to the plot's origin (0-based)
+     * @return true if the coordinates are within the cross shape, false otherwise
+     */
+    public boolean isWithinCrossShape(int plotLocalX, int plotLocalZ) {
+        int thirdSize = PLOT_WIDTH / 3;
+        
+        // Check if in vertical bar (center third horizontally)
+        boolean inVerticalBar = plotLocalX >= thirdSize && plotLocalX < 2 * thirdSize;
+        // Check if in horizontal bar (center third vertically)
+        boolean inHorizontalBar = plotLocalZ >= thirdSize && plotLocalZ < 2 * thirdSize;
+        
+        return inVerticalBar || inHorizontalBar;
+    }
+
 }

@@ -21,6 +21,7 @@ package com.plotsquared.core.configuration;
 import com.plotsquared.core.plot.BlockBucket;
 import com.plotsquared.core.plot.PlotAreaTerrainType;
 import com.plotsquared.core.plot.PlotAreaType;
+import com.plotsquared.core.plot.PlotShape;
 import com.plotsquared.core.util.MathMan;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.world.biome.BiomeType;
@@ -132,6 +133,14 @@ public class ConfigurationUtil {
         return getValueFromConfig(config, "generator.terrain", PlotAreaTerrainType::fromLegacyInt,
                 PlotAreaTerrainType::fromString, () -> PlotAreaTerrainType.NONE
         );
+    }
+
+    public static PlotShape getShape(ConfigurationSection config) {
+        String value = config.getString("plot.shape");
+        if (value == null) {
+            return PlotShape.SQUARE;
+        }
+        return PlotShape.fromString(value).orElse(PlotShape.SQUARE);
     }
 
 
