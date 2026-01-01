@@ -127,18 +127,10 @@ public abstract class SquarePlotManager extends GridPlotManager {
         
         // For cross-shaped plots, check if coordinates are within the cross pattern
         if (squarePlotWorld.getShape() == PlotShape.CROSS) {
-            int thirdWidth = squarePlotWorld.PLOT_WIDTH / 3;
-            int thirdLength = squarePlotWorld.PLOT_WIDTH / 3;
             int plotLocalX = rx - pathWidthLower - 1;
             int plotLocalZ = rz - pathWidthLower - 1;
             
-            // Check if in vertical bar (center third horizontally)
-            boolean inVerticalBar = plotLocalX >= thirdWidth && plotLocalX < 2 * thirdWidth;
-            // Check if in horizontal bar (center third vertically)
-            boolean inHorizontalBar = plotLocalZ >= thirdLength && plotLocalZ < 2 * thirdLength;
-            
-            if (!inVerticalBar && !inHorizontalBar) {
-                // Outside the cross shape
+            if (!squarePlotWorld.isWithinCrossShape(plotLocalX, plotLocalZ)) {
                 return null;
             }
         }
@@ -200,18 +192,10 @@ public abstract class SquarePlotManager extends GridPlotManager {
             if (hash == 0) {
                 // For cross-shaped plots, check if coordinates are within the cross pattern
                 if (squarePlotWorld.getShape() == PlotShape.CROSS) {
-                    int thirdWidth = squarePlotWorld.PLOT_WIDTH / 3;
-                    int thirdLength = squarePlotWorld.PLOT_WIDTH / 3;
                     int plotLocalX = rx - pathWidthLower - 1;
                     int plotLocalZ = rz - pathWidthLower - 1;
                     
-                    // Check if in vertical bar (center third horizontally)
-                    boolean inVerticalBar = plotLocalX >= thirdWidth && plotLocalX < 2 * thirdWidth;
-                    // Check if in horizontal bar (center third vertically)
-                    boolean inHorizontalBar = plotLocalZ >= thirdLength && plotLocalZ < 2 * thirdLength;
-                    
-                    if (!inVerticalBar && !inHorizontalBar) {
-                        // Outside the cross shape
+                    if (!squarePlotWorld.isWithinCrossShape(plotLocalX, plotLocalZ)) {
                         return null;
                     }
                 }
