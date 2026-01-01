@@ -321,6 +321,9 @@ public abstract class PlotArea implements ComponentLike {
             this.terrain = ConfigurationUtil.getTerrain(config);
             this.type = ConfigurationUtil.getType(config);
         }
+        if (config.contains("plot.shape")) {
+            this.shape = ConfigurationUtil.getShape(config);
+        }
         this.mobSpawning = config.getBoolean("natural_mob_spawning");
         this.miscSpawnUnowned = config.getBoolean("misc_spawn_unowned");
         this.mobSpawnerSpawning = config.getBoolean("mob_spawner_spawning");
@@ -511,6 +514,9 @@ public abstract class PlotArea implements ComponentLike {
         if (this.getType() != PlotAreaType.NORMAL) {
             options.put("generator.terrain", this.getTerrain());
             options.put("generator.type", this.getType().toString());
+        }
+        if (this.getShape() != PlotShape.SQUARE) {
+            options.put("plot.shape", this.getShape().toString());
         }
         ConfigurationNode[] settings = getSettingNodes();
         /*
