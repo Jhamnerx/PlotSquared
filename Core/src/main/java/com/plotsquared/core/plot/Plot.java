@@ -2442,6 +2442,42 @@ public class Plot {
         if (!this.isMerged()) {
             Location pos1 = this.getBottomAbs().withY(getArea().getMinBuildHeight());
             Location pos2 = this.getTopAbs().withY(getArea().getMaxBuildHeight());
+            
+            // Check if this is a cross-shaped plot
+            if (getArea().getShape() == PlotShape.CROSS) {
+                Set<CuboidRegion> regions = new HashSet<>();
+                
+                // Calculate the center and dimensions
+                int minX = pos1.getX();
+                int maxX = pos2.getX();
+                int minZ = pos1.getZ();
+                int maxZ = pos2.getZ();
+                int minY = pos1.getY();
+                int maxY = pos2.getY();
+                
+                int width = maxX - minX + 1;
+                int length = maxZ - minZ + 1;
+                
+                // For a cross shape, we create:
+                // 1. Horizontal bar (full width, middle third height)
+                // 2. Vertical bar (middle third width, full height)
+                int thirdWidth = width / 3;
+                int thirdLength = length / 3;
+                
+                // Vertical bar (center column, full length)
+                BlockVector3 verticalPos1 = BlockVector3.at(minX + thirdWidth, minY, minZ);
+                BlockVector3 verticalPos2 = BlockVector3.at(minX + 2 * thirdWidth - 1, maxY, maxZ);
+                regions.add(new CuboidRegion(verticalPos1, verticalPos2));
+                
+                // Horizontal bar (full width, center row)
+                BlockVector3 horizontalPos1 = BlockVector3.at(minX, minY, minZ + thirdLength);
+                BlockVector3 horizontalPos2 = BlockVector3.at(maxX, maxY, minZ + 2 * thirdLength - 1);
+                regions.add(new CuboidRegion(horizontalPos1, horizontalPos2));
+                
+                return regions;
+            }
+            
+            // Default square/rectangular plot
             CuboidRegion rg = new CuboidRegion(pos1.getBlockVector3(), pos2.getBlockVector3());
             return Collections.singleton(rg);
         }

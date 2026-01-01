@@ -136,6 +136,7 @@ public abstract class PlotArea implements ComponentLike {
     private boolean spawnBreeding = false;
     private PlotAreaType type = PlotAreaType.NORMAL;
     private PlotAreaTerrainType terrain = PlotAreaTerrainType.NONE;
+    private PlotShape shape = PlotShape.SQUARE;
     private boolean homeAllowNonmember = false;
     private BlockLoc nonmemberHome;
     private BlockLoc defaultHome;
@@ -1421,6 +1422,19 @@ public abstract class PlotArea implements ComponentLike {
      */
     public void setTerrain(PlotAreaTerrainType terrain) {
         this.terrain = terrain;
+    }
+
+    public PlotShape getShape() {
+        return this.shape;
+    }
+
+    /**
+     * Set the shape of plots in this plot area.
+     *
+     * @param shape the shape of the plots.
+     */
+    public void setShape(PlotShape shape) {
+        this.shape = shape;
     }
 
     public boolean isHomeAllowNonmember() {

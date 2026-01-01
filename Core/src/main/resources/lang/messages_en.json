@@ -171,6 +171,8 @@
   "plotareatype.plot_area_type_normal": "<gray>Standard plot generation</gray>",
   "plotareatype.plot_area_type_augmented": "<gray>Plot generation with vanilla terrain</gray>",
   "plotareatype.plot_area_type_partial": "<gray>Vanilla with clusters of plots</gray>",
+  "plotshape.plot_shape_square": "<gray>Square shaped plots</gray>",
+  "plotshape.plot_shape_cross": "<gray>Cross shaped plots</gray>",
   "schematics.schematic_too_large": "<prefix><red>The plot is too large for this action!</red>",
   "schematics.schematic_size_mismatch": "<prefix><red>The schematic's size does not match the plot's. If you want to paste anyway, enable schematics.paste-mismatches in settings.yml</red>",
   "schematics.schematic_invalid": "<prefix><red>That is not a valid schematic. Reason: </red><gray><reason>.</gray>",

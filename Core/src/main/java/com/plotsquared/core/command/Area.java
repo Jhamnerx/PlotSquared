@@ -40,6 +40,7 @@ import com.plotsquared.core.plot.PlotArea;
 import com.plotsquared.core.plot.PlotAreaTerrainType;
 import com.plotsquared.core.plot.PlotAreaType;
 import com.plotsquared.core.plot.PlotId;
+import com.plotsquared.core.plot.PlotShape;
 import com.plotsquared.core.plot.world.PlotAreaManager;
 import com.plotsquared.core.plot.world.SinglePlotArea;
 import com.plotsquared.core.queue.GlobalBlockQueue;
@@ -522,6 +523,10 @@ public class Area extends SubCommand {
                                     pa.setType(PlotAreaType.fromString(pair[1])
                                             .orElseThrow(() -> new IllegalArgumentException(pair[1] + " is not a valid type.")));
                                     builder.plotAreaType(pa.getType());
+                                }
+                                case "shape" -> {
+                                    pa.setShape(PlotShape.fromString(pair[1])
+                                            .orElseThrow(() -> new IllegalArgumentException(pair[1] + " is not a valid shape.")));
                                 }
                                 default -> {
                                     player.sendMessage(
