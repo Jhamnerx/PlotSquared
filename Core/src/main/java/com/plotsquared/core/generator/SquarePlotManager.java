@@ -24,6 +24,7 @@ import com.plotsquared.core.player.PlotPlayer;
 import com.plotsquared.core.plot.Plot;
 import com.plotsquared.core.plot.PlotArea;
 import com.plotsquared.core.plot.PlotId;
+import com.plotsquared.core.plot.PlotShape;
 import com.plotsquared.core.queue.QueueCoordinator;
 import com.plotsquared.core.util.HashUtil;
 import com.plotsquared.core.util.RegionManager;
@@ -118,11 +119,31 @@ public abstract class SquarePlotManager extends GridPlotManager {
         int rx = Math.floorMod(x, size);
         int dz = Math.floorDiv(z, size) + 1;
         int rz = Math.floorMod(z, size);
+        
+        // Check if on road
         if (rz <= pathWidthLower || rz > end || rx <= pathWidthLower || rx > end) {
             return null;
-        } else {
-            return PlotId.of(dx, dz);
         }
+        
+        // For cross-shaped plots, check if coordinates are within the cross pattern
+        if (squarePlotWorld.getShape() == PlotShape.CROSS) {
+            int thirdWidth = squarePlotWorld.PLOT_WIDTH / 3;
+            int thirdLength = squarePlotWorld.PLOT_WIDTH / 3;
+            int plotLocalX = rx - pathWidthLower - 1;
+            int plotLocalZ = rz - pathWidthLower - 1;
+            
+            // Check if in vertical bar (center third horizontally)
+            boolean inVerticalBar = plotLocalX >= thirdWidth && plotLocalX < 2 * thirdWidth;
+            // Check if in horizontal bar (center third vertically)
+            boolean inHorizontalBar = plotLocalZ >= thirdLength && plotLocalZ < 2 * thirdLength;
+            
+            if (!inVerticalBar && !inHorizontalBar) {
+                // Outside the cross shape
+                return null;
+            }
+        }
+        
+        return PlotId.of(dx, dz);
     }
 
     public PlotId getNearestPlotId(@NonNull PlotArea plotArea, int x, int y, int z) {
@@ -177,6 +198,23 @@ public abstract class SquarePlotManager extends GridPlotManager {
             int hash = HashUtil.hash(merged);
             // Not merged, and no need to check if it is
             if (hash == 0) {
+                // For cross-shaped plots, check if coordinates are within the cross pattern
+                if (squarePlotWorld.getShape() == PlotShape.CROSS) {
+                    int thirdWidth = squarePlotWorld.PLOT_WIDTH / 3;
+                    int thirdLength = squarePlotWorld.PLOT_WIDTH / 3;
+                    int plotLocalX = rx - pathWidthLower - 1;
+                    int plotLocalZ = rz - pathWidthLower - 1;
+                    
+                    // Check if in vertical bar (center third horizontally)
+                    boolean inVerticalBar = plotLocalX >= thirdWidth && plotLocalX < 2 * thirdWidth;
+                    // Check if in horizontal bar (center third vertically)
+                    boolean inHorizontalBar = plotLocalZ >= thirdLength && plotLocalZ < 2 * thirdLength;
+                    
+                    if (!inVerticalBar && !inHorizontalBar) {
+                        // Outside the cross shape
+                        return null;
+                    }
+                }
                 return id;
             }
             Plot plot = squarePlotWorld.getOwnedPlotAbs(id);
