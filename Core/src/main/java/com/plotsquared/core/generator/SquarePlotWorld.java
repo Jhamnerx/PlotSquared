@@ -70,6 +70,9 @@ public abstract class SquarePlotWorld extends GridPlotWorld {
      * For a cross shape, the plot is divided into thirds both horizontally and vertically.
      * Only the center vertical third and center horizontal third are considered part of the plot.
      *
+     * Note: For best results, PLOT_WIDTH should be divisible by 3. If not, integer division
+     * will be used, which may result in slightly uneven cross shapes.
+     *
      * @param plotLocalX The X coordinate relative to the plot's origin (0-based)
      * @param plotLocalZ The Z coordinate relative to the plot's origin (0-based)
      * @return true if the coordinates are within the cross shape, false otherwise

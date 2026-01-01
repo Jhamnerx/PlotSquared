@@ -75,7 +75,7 @@ Cross-shaped plots work with:
 
 ## Notes
 
+- **Important**: Cross-shaped plots work best with plot widths divisible by 3. If the width is not divisible by 3, integer division will be used, which may result in slightly uneven cross shapes. Recommended widths: 30, 33, 36, 39, 42, 45, etc.
 - Cross-shaped plots are calculated based on the plot width divided into thirds
-- The plot must have a width divisible by 3 for best results
 - Players standing in the corner areas (outside the cross) will not be considered inside the plot
-- Merging cross-shaped plots is supported and will maintain the cross pattern
+- Merging cross-shaped plots is supported and will maintain the cross pattern for individual plots, with roads included in merged regions
